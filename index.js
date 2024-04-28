@@ -62,6 +62,14 @@ async function run() {
         })
 
 
+        //get single user added data 
+        app.get("/myList/:email" , async(req , res) => {
+            const email = {userEmail : req.params.email};
+            const result =await allUsersTouristSpots.find(email).toArray();
+            res.send(result);
+        })
+
+
 
 
         // Send a ping to confirm a successful connection
