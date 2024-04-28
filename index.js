@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
 
 
@@ -48,7 +49,15 @@ async function run() {
 
         //get all user created tourist spots
         app.get("/allTouristSpot" , async(req , res) => {
-            const result = await allUsersTouristSpots.find.toArray();
+            const result = await allUsersTouristSpots.find().toArray();
+            res.send(result);
+        })
+
+        //get single tourist spot
+        app.get("/allTouristSpot/:id" , async(req , res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await allUsersTouristSpots.findOne(query);
             res.send(result);
         })
 
