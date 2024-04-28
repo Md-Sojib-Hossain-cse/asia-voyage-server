@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require('mongodb');
-require('dotenv').config()
+require('dotenv').config();
 
 
 //uri
@@ -25,15 +25,23 @@ const client = new MongoClient(uri, {
 });
 
 const touristSpotsCollection = client.db("asiaVoyageDB").collection("touristspots");
+const allUsersTouristSpots = client.db("asiaVoyageDB").collection("allUsersTouristSpots");
 
 
 async function run() {
     try {
         await client.connect();
 
-
         app.get("/touristSpots" , async(req , res) => {
-            res.send('connected')
+            const result = await touristSpotsCollection.find().toArray();
+            res.send(result)
+        })
+
+
+        app.post("/addTouristSpot" , async(req , res) => {
+            const touristSpotDetails = req.body;
+            const result = await allUsersTouristSpots.insertOne(touristSpotDetails);
+            res.send(result);
         })
 
 
