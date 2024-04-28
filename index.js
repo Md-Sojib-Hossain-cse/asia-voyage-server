@@ -32,15 +32,23 @@ async function run() {
     try {
         await client.connect();
 
+
+        //get pre defined tourist spots for homepage
         app.get("/touristSpots" , async(req , res) => {
             const result = await touristSpotsCollection.find().toArray();
             res.send(result)
         })
 
-
+        //create tourist spot details
         app.post("/addTouristSpot" , async(req , res) => {
             const touristSpotDetails = req.body;
             const result = await allUsersTouristSpots.insertOne(touristSpotDetails);
+            res.send(result);
+        })
+
+        //get all user created tourist spots
+        app.get("/allTouristSpot" , async(req , res) => {
+            const result = await allUsersTouristSpots.find.toArray();
             res.send(result);
         })
 
