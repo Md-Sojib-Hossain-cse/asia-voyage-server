@@ -77,7 +77,6 @@ async function run() {
 
             const filter = { _id: new ObjectId(id) };
             const options = { upsert: true };
-
             const updateDoc = {
                 $set: {
                     userName: updatedSpotDetails.userName,
@@ -95,7 +94,15 @@ async function run() {
             };
 
             const result = await allUsersTouristSpots.updateOne(filter , updateDoc , options);
-            
+            res.send(result);
+        })
+
+
+        //delete spot from my list
+        app.delete("/delete/:id" , async(req , res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await allUsersTouristSpots.deleteOne(query);
             res.send(result);
         })
 
