@@ -34,9 +34,17 @@ async function run() {
         await client.connect();
 
 
-        //get pre defined tourist spots for homepage
+        //get all pre defined tourist spots for homepage
         app.get("/touristSpots", async (req, res) => {
             const result = await touristSpotsCollection.find().toArray();
+            res.send(result)
+        })
+
+        //get single pre defined tourist spots for homepage
+        app.get("/touristSpots/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await touristSpotsCollection.findOne(query);
             res.send(result)
         })
 
