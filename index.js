@@ -12,9 +12,14 @@ const uri = `mongodb+srv://${process.env.USER_ID}:${process.env.USER_PASSWORD}@c
 
 const app = express();
 const port = process.env.PORT || 5000;
+const corsConfig = {
+    origin: ["http://localhost:5173"],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}
 
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsConfig))
 
 //creating mongoClient
 const client = new MongoClient(uri, {
@@ -32,7 +37,7 @@ const countriesCategoryCollection = client.db("asiaVoyageDB").collection("countr
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
 
         //get all pre defined tourist spots for homepage
@@ -44,7 +49,7 @@ async function run() {
         //get single pre defined tourist spots for homepage
         app.get("/touristSpots/:id", async (req, res) => {
             const id = req.params.id;
-            const query = {_id : new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await touristSpotsCollection.findOne(query);
             res.send(result)
         })
@@ -102,30 +107,30 @@ async function run() {
                 },
             };
 
-            const result = await allUsersTouristSpots.updateOne(filter , updateDoc , options);
+            const result = await allUsersTouristSpots.updateOne(filter, updateDoc, options);
             res.send(result);
         })
 
 
         //delete spot from my list
-        app.delete("/delete/:id" , async(req , res) => {
+        app.delete("/delete/:id", async (req, res) => {
             const id = req.params.id;
-            const query = {_id : new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await allUsersTouristSpots.deleteOne(query);
             res.send(result);
         })
 
 
         //get all countries from countiesCategory
-        app.get("/countriesCategory" , async(req , res) => {
+        app.get("/countriesCategory", async (req, res) => {
             const result = await countriesCategoryCollection.find().toArray();
             res.send(result)
         })
 
         //country base all tourist spot
-        app.get("/:country", async(req , res)=> {
+        app.get("/:country", async (req, res) => {
             const country = req.params.country;
-            const query ={countryName : country}
+            const query = { countryName: country }
             const result = await allUsersTouristSpots.find(query).toArray();
             res.send(result);
         })
@@ -133,8 +138,8 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
