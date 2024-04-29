@@ -27,6 +27,7 @@ const client = new MongoClient(uri, {
 
 const touristSpotsCollection = client.db("asiaVoyageDB").collection("touristspots");
 const allUsersTouristSpots = client.db("asiaVoyageDB").collection("allUsersTouristSpots");
+const countriesCategoryCollection = client.db("asiaVoyageDB").collection("countriesCategory");
 
 
 async function run() {
@@ -112,6 +113,13 @@ async function run() {
             const query = {_id : new ObjectId(id)};
             const result = await allUsersTouristSpots.deleteOne(query);
             res.send(result);
+        })
+
+
+        //get all countries from countiesCategory
+        app.get("/countriesCategory" , async(req , res) => {
+            const result = await countriesCategoryCollection.find().toArray();
+            res.send(result)
         })
 
 
