@@ -122,6 +122,14 @@ async function run() {
             res.send(result)
         })
 
+        //country base all tourist spot
+        app.get("/:country", async(req , res)=> {
+            const country = req.params.country;
+            const query ={countryName : country}
+            const result = await allUsersTouristSpots.find(query).toArray();
+            res.send(result);
+        })
+
 
 
         // Send a ping to confirm a successful connection
